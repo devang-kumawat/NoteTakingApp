@@ -1,3 +1,3 @@
 // src/api.js
-const BASE_URL = "http://localhost:5000";  // ✅ for browser-side requests
+const BASE_URL = "https://note-backend-bajx.onrender.com";
 export default BASE_URL;
