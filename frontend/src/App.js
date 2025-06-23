@@ -8,12 +8,16 @@ import { debounce } from "lodash";
 
 import axios from "axios";
 
+import BASE_URL from "./api";
+
+
+
 function App() {
   const [notes, setNotes] = useState([]);
   // Fetch notes from the server when the component mounts
   // and set the notes state with the fetched data.
   useEffect(() => {
-    axios.get("http://localhost:5000/notes")
+      axios.get(`${BASE_URL}/notes`)
       .then((res) => {
         setNotes(res.data);
       })
@@ -32,7 +36,8 @@ function App() {
       color,
     };
     try{
-      const res = await axios.post("http://localhost:5000/notes", newNote);
+      const res = await axios.post(`${BASE_URL}/notes`, newNote);
+
       setNotes([...notes, res.data]);
     } catch (err) {
       console.error("Error adding note:", err);
@@ -50,7 +55,7 @@ function App() {
 
     // Delete the note from the server
     try {
-      axios.delete(`http://127.0.0.1:5000/notes/${id}`);
+      axios.delete(`${BASE_URL}/notes/${id}`)
     } catch (err) {
       console.error("Error deleting note:", err);
     }
@@ -58,11 +63,11 @@ function App() {
 
   const debouncedUpdate = debounce(async (note) => {
     try {
-      await axios.put(`http://127.0.0.1:5000/notes/${note.id}`, note);
+      await axios.put(`${BASE_URL}/notes/${note.id}`, note)
     } catch (err) {
       console.error("Debounced update failed", err);
     }
-  }, 100); // wait 500ms after last input
+  }, 100); // wait 100ms after last input
 
   const updateText = (text,id)=>{
     const tempNotes = [...notes];

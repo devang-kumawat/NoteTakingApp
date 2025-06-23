@@ -1,27 +1,55 @@
 from flask import jsonify, request
 
+from models.note_model import Note
+from extensions import db
 notes = []  # In-memory storage
 
 def get_notes_logic():
-    return jsonify(notes), 200
+    notes = Note.query.all()
+    result = [
+        {"id": note.id, "text": note.text, "time": note.time, "color": note.color}
+        for note in notes
+    ]
+    return jsonify(result), 200
 
 def add_note_logic(request):
-    note = request.get_json()
-    notes.append(note)
-    return jsonify(note), 201
+
+    data = request.get_json()
+    new_note = Note(
+        id = data['id'],
+        text=data["text"],
+        time=data["time"],
+        color=data["color"]
+    )
+    db.session.add(new_note)
+    db.session.commit()
+    return jsonify(data), 201
 
 def update_note_logic(id, request):
     data = request.get_json()
-    for note in notes:
-        if note["id"] == id:
-            note.update(data)
-            return jsonify(note), 200
-    return jsonify({"error": "Note not found"}), 404
+    note = db.session.get(Note, id)
+    if not note:
+        return jsonify({"error": "Note not found"}), 404
+    
+    note.text = data["text"]
+    note.time = data["time"]
+    note.color = data["color"]
+
+    db.session.commit()
+
+    return jsonify({
+        "id": note.id,
+        "text": note.text,
+        "time": note.time,
+        "color": note.color
+    }), 200
 
 def delete_note_logic(id):
-    global notes
-    new_notes = [note for note in notes if note["id"] != id]
-    if len(new_notes) == len(notes):
+    note = db.session.get(Note, id)
+
+    if not note:
         return jsonify({"error": "Note not found"}), 404
-    notes = new_notes
+
+    db.session.delete(note)
+    db.session.commit()
     return "", 204

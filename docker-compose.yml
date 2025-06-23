@@ -1,0 +1,28 @@
+version: "3.8"
+
+services:
+  backend:
+    build:
+      context: ./backend
+    container_name: note-backend
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./backend:/app
+    networks:
+      - note-net
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: note-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - note-net
+
+networks:
+  note-net:
+    driver: bridge
