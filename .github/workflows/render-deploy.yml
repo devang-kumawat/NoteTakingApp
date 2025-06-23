@@ -15,7 +15,7 @@ jobs:
 
       - name: Trigger Backend Deploy
         run: |
-          curl -X POST "https://api.render.com/deploy/srv-d1cp1lmmcj7s73b71ld0?key=${{ secrets.RENDER_API_KEY }}"
+          curl -X POST "https://api.render.com/deploy/srv-d1cp1lmmcj7s73b71ld0?key=${{ secrets.RENDER_API_KEY_BACKEND }}"
 
       - name: Trigger Frontend Deploy
         run: |
