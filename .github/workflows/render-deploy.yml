@@ -1,0 +1,22 @@
+name: Deploy to Render
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Trigger Backend Deploy
+        run: |
+          curl -X POST "https://api.render.com/deploy/srv-d1cp1lmmcj7s73b71ld0?key=${{ secrets.RENDER_API_KEY }}"
+
+      - name: Trigger Frontend Deploy
+        run: |
+          curl -X POST "https://api.render.com/deploy/srv-d1cop3mmcj7s73b6og7g?key=${{ secrets.RENDER_API_KEY }}"
