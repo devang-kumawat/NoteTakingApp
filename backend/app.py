@@ -11,7 +11,8 @@ load_dotenv()  # 🔐 Load env vars from .env
 
 app = Flask(__name__)
 app.config.from_object(Config)  # 👈 Apply config class
-CORS(app, origins=["http://localhost:3000"])
+
+CORS(app, origins=["https://note-frontend-9vcp.onrender.com"])
 
 db.init_app(app)
 
